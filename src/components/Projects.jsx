@@ -74,12 +74,12 @@ const Projects = () => {
       impact: "Demonstrates proficiency in Python development, Discord bot architecture, community management systems, database design, and production deployment. Features include advanced captcha systems, automated moderation, warning systems, and comprehensive administrative tools for community management.",
       technologies: ["Python 3.11+", "discord.py", "SQLite", "Asyncio", "Discord API", "Bot Architecture"],
       techIcons: [FaPython, FaDiscord, SiSqlite, FaShieldAlt, FaUserShield, FaClipboard],
-      image: "/screenshots/community-manager-info.png",
+      image: "/images/community-manager-info.png",
       demoImages: [
-        { src: "/screenshots/community-manager-info.png", caption: "Bot information and feature overview" },
-        { src: "/screenshots/community-manager-verification.png", caption: "Advanced verification system with multiple security levels" },
-        { src: "/screenshots/community-manager-help.png", caption: "Interactive help system with navigation" },
-        { src: "/screenshots/community-manager-cmdline.png", caption: "Command line interface and deployment" }
+        { src: "/images/community-manager-info.png", caption: "Bot information and feature overview" },
+        { src: "/images/community-manager-verification.png", caption: "Advanced verification system with multiple security levels" },
+        { src: "/images/community-manager-help.png", caption: "Interactive help system with navigation" },
+        { src: "/images/community-manager-cmdline.png", caption: "Command line interface and deployment" }
       ],
       github: "https://github.com/404Piyush/discord-community-manager",
       featured: true,
@@ -110,11 +110,11 @@ const Projects = () => {
       impact: "Demonstrates proficiency in enterprise Java development, Discord bot architecture, database design, interactive UI development, mathematical algorithm implementation, and production-ready software delivery. Features include 6 complete casino games, persistent user economy, and professional game session management.",
       technologies: ["Java 17+", "JDA 5.0.0", "SQLite", "Maven", "Discord API", "Game Logic"],
       techIcons: [FaJava, FaDiscord, SiSqlite, FaCogs, FaDice, FaGamepad],
-      image: "/screenshots/russian-roulette.png",
+      image: "/images/russian-roulette.png",
       demoImages: [
-        { src: "/screenshots/help.png", caption: "Comprehensive command guide and help system" },
-        { src: "/screenshots/russian-roulette.png", caption: "High-stakes Russian Roulette game interface" },
-        { src: "/screenshots/blackjack.png", caption: "Interactive blackjack with real-time gameplay" }
+        { src: "/images/help.png", caption: "Comprehensive command guide and help system" },
+        { src: "/images/russian-roulette.png", caption: "High-stakes Russian Roulette game interface" },
+        { src: "/images/blackjack.png", caption: "Interactive blackjack with real-time gameplay" }
       ],
       github: "https://github.com/404Piyush/discord-gambling-bot",
       featured: false,
