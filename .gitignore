@@ -111,7 +111,6 @@ bower_components
 .netlify
 
 # Project specific files
-screenshots/
 EMAILJS_TEMPLATE.html
 deploy-check.js
 
