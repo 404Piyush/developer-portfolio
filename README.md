@@ -2,7 +2,7 @@
 
 Modern, responsive portfolio website showcasing full-stack development skills and projects.
 
-**Live Demo**: [Coming Soon]
+**Live Demo**: https://dev-piyush.netlify.app/
 
 ## ✨ Features
 
