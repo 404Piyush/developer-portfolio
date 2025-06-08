@@ -145,7 +145,7 @@ const Projects = () => {
       impact: "Demonstrates practical API integration skills, user-focused design thinking, and ability to create useful tools that solve real-world problems. Shows progression in Java development and understanding of external service integration.",
       technologies: ["Java", "JDA 5.0.0", "temp-mail.io API", "Gson", "OkHttp", "Apache HttpClient"],
       techIcons: [FaJava, FaDiscord, FaDatabase, FaCogs, FaUsers, FaPlay],
-      image: "/api/placeholder/600/400",
+      image: "/images/tms-thumbnail.jpg",
       github: "https://github.com/404Piyush/TMS",
       featured: false,
       features: [
@@ -225,20 +225,19 @@ const Projects = () => {
     >
       {/* Project Image/Demo */}
       <div className="relative overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 h-48">
-        {project.image && (project.image.startsWith('/screenshots/') || project.image.startsWith('/images/')) ? (
-          <img 
-            src={project.image} 
-            alt={project.title}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              e.target.style.display = 'none';
-              e.target.nextElementSibling.style.display = 'flex';
-            }}
-          />
-        ) : null}
-        <div className="absolute inset-0 flex items-center justify-center" style={{display: project.image && (project.image.startsWith('/screenshots/') || project.image.startsWith('/images/')) ? 'none' : 'flex'}}>
+        <img 
+          src={project.image} 
+          alt={project.title}
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            // Show fallback if image fails to load
+            e.target.style.display = 'none';
+            e.target.nextElementSibling.style.display = 'flex';
+          }}
+        />
+        <div className="fallback-content absolute inset-0 flex items-center justify-center" style={{display: 'none'}}>
           <FaPlay className="w-12 h-12 text-gray-400 dark:text-gray-500 opacity-50" />
-          <span className="ml-2 text-gray-400 dark:text-gray-500 font-medium">Preview Available in Case Study</span>
+          <span className="ml-2 text-gray-400 dark:text-gray-500 font-medium">View Details →</span>
         </div>
         {project.demoVideo && !featured && (
           <div className="absolute top-4 right-4">
