@@ -17,7 +17,8 @@ import {
   FaPython,
   FaShieldAlt,
   FaUserShield,
-  FaClipboard
+  FaClipboard,
+  FaLaptopCode
 } from 'react-icons/fa'
 import { SiSqlite } from 'react-icons/si'
 
@@ -29,7 +30,7 @@ const Projects = () => {
     {
       id: 1,
       title: "Classroom Management & Monitoring System (CMMS)",
-      category: "fullstack",
+      category: "software",
       description: "A comprehensive real-time classroom management solution with WebSocket communication, enabling teachers to monitor and control student computer activities during sessions.",
       longDescription: "CMMS is a sophisticated full-stack classroom management platform built with Node.js/Express backend and Java desktop client. This comprehensive solution enables teachers to create real-time monitoring sessions, control student computer activities, block applications, filter websites, and manage classroom environments effectively. The system demonstrates advanced backend development, WebSocket implementation, desktop application development, and real-time communication protocols.",
       challenge: "Educational institutions needed a robust solution for managing classroom computer sessions, monitoring student activities in real-time, and maintaining control over learning environments. Traditional solutions lacked comprehensive features, real-time capabilities, and cross-platform compatibility.",
@@ -180,9 +181,9 @@ const Projects = () => {
 
   const filters = [
     { key: 'all', label: 'All Projects', icon: FaCogs },
-    { key: 'fullstack', label: 'Full-Stack', icon: FaReact },
+    // { key: 'fullstack', label: 'Full-Stack', icon: FaReact },
     { key: 'discord', label: 'Discord', icon: FaDiscord },
-    { key: 'analytics', label: 'Analytics', icon: FaChartLine }
+    { key: 'software', label: 'Software', icon: FaLaptopCode }
   ]
 
   const filteredProjects = activeFilter === 'all' 
@@ -224,18 +225,21 @@ const Projects = () => {
     >
       {/* Project Image/Demo */}
       <div className="relative overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 h-48">
-        {project.image && project.image.startsWith('/screenshots/') ? (
+        {project.image && (project.image.startsWith('/screenshots/') || project.image.startsWith('/images/')) ? (
           <img 
             src={project.image} 
             alt={project.title}
             className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              e.target.nextElementSibling.style.display = 'flex';
+            }}
           />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <FaPlay className="w-12 h-12 text-gray-400 dark:text-gray-500 opacity-50" />
-            <span className="ml-2 text-gray-400 dark:text-gray-500 font-medium">Preview Unavailable</span>
-          </div>
-        )}
+        ) : null}
+        <div className="absolute inset-0 flex items-center justify-center" style={{display: project.image && (project.image.startsWith('/screenshots/') || project.image.startsWith('/images/')) ? 'none' : 'flex'}}>
+          <FaPlay className="w-12 h-12 text-gray-400 dark:text-gray-500 opacity-50" />
+          <span className="ml-2 text-gray-400 dark:text-gray-500 font-medium">Preview Available in Case Study</span>
+        </div>
         {project.demoVideo && !featured && (
           <div className="absolute top-4 right-4">
             <span className="bg-black/70 text-white text-xs px-2 py-1 rounded-full">
