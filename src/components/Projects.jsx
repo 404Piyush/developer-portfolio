@@ -110,7 +110,7 @@ const Projects = () => {
       impact: "Demonstrates proficiency in enterprise Java development, Discord bot architecture, database design, interactive UI development, mathematical algorithm implementation, and production-ready software delivery. Features include 6 complete casino games, persistent user economy, and professional game session management.",
       technologies: ["Java 17+", "JDA 5.0.0", "SQLite", "Maven", "Discord API", "Game Logic"],
       techIcons: [FaJava, FaDiscord, SiSqlite, FaCogs, FaDice, FaGamepad],
-      image: "/screenshots/help.png",
+      image: "/screenshots/russian-roulette.png",
       demoImages: [
         { src: "/screenshots/help.png", caption: "Comprehensive command guide and help system" },
         { src: "/screenshots/russian-roulette.png", caption: "High-stakes Russian Roulette game interface" },
@@ -145,7 +145,7 @@ const Projects = () => {
       impact: "Demonstrates practical API integration skills, user-focused design thinking, and ability to create useful tools that solve real-world problems. Shows progression in Java development and understanding of external service integration.",
       technologies: ["Java", "JDA 5.0.0", "temp-mail.io API", "Gson", "OkHttp", "Apache HttpClient"],
       techIcons: [FaJava, FaDiscord, FaDatabase, FaCogs, FaUsers, FaPlay],
-      image: "/images/tms-thumbnail.jpg",
+      image: null,
       github: "https://github.com/404Piyush/TMS",
       featured: false,
       features: [
@@ -225,19 +225,27 @@ const Projects = () => {
     >
       {/* Project Image/Demo */}
       <div className="relative overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 h-48">
-        <img 
-          src={project.image} 
-          alt={project.title}
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            // Show fallback if image fails to load
-            e.target.style.display = 'none';
-            e.target.nextElementSibling.style.display = 'flex';
-          }}
-        />
-        <div className="fallback-content absolute inset-0 flex items-center justify-center" style={{display: 'none'}}>
-          <FaPlay className="w-12 h-12 text-gray-400 dark:text-gray-500 opacity-50" />
-          <span className="ml-2 text-gray-400 dark:text-gray-500 font-medium">View Details →</span>
+        {project.image ? (
+          <img 
+            src={project.image} 
+            alt={project.title}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              // Show fallback if image fails to load
+              e.target.style.display = 'none';
+              e.target.nextElementSibling.style.display = 'flex';
+            }}
+          />
+        ) : null}
+        <div 
+          className="absolute inset-0 flex items-center justify-center cursor-pointer hover:bg-black/10 transition-colors"
+          style={{display: project.image ? 'none' : 'flex'}}
+          onClick={() => setSelectedProject(project)}
+        >
+          <div className="text-center">
+            <FaPlay className="w-12 h-12 text-gray-400 dark:text-gray-500 opacity-50 mx-auto mb-2" />
+            <span className="text-gray-400 dark:text-gray-500 font-medium">View Details →</span>
+          </div>
         </div>
         {project.demoVideo && !featured && (
           <div className="absolute top-4 right-4">
