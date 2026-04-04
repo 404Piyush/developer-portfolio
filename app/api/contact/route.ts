@@ -55,11 +55,23 @@ export async function POST(request: Request) {
     body: formData,
   })
 
-  const data = (await response.json().catch(() => null)) as { success?: boolean; message?: string } | null
+  const responseText = await response.text()
+  const data = (() => {
+    try {
+      return (responseText ? JSON.parse(responseText) : null) as { success?: boolean; message?: string } | null
+    } catch {
+      return null
+    }
+  })()
 
   if (!response.ok || !data?.success) {
     return NextResponse.json(
-      { success: false, message: data?.message ?? "Unable to send your message right now." },
+      {
+        success: false,
+        message:
+          data?.message ??
+          (responseText ? `Web3Forms rejected the submission: ${responseText}` : "Web3Forms rejected the submission."),
+      },
       { status: 502 }
     )
   }

@@ -1,7 +1,7 @@
 "use client"
 
+import HCaptcha from "@hcaptcha/react-hcaptcha"
 import Link from "next/link"
-import Script from "next/script"
 import { BriefcaseBusiness, CalendarDays, Github, Linkedin, Mail, Send } from "lucide-react"
 import { useRef, useState } from "react"
 import { profile } from "@/data/portfolio"
@@ -55,12 +55,13 @@ export function GetInTouch({
   title = "Make it ridiculously easy for a serious client to reach out",
   description = "The pitch here is simple: sharp systems thinking, strong delivery range, and enough engineering taste to turn complex product ideas into something clean, fast, and convincing.",
 }: GetInTouchProps) {
-  const formRef = useRef<HTMLFormElement | null>(null)
+  const captchaRef = useRef<HCaptcha | null>(null)
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [company, setCompany] = useState("")
   const [projectType, setProjectType] = useState("Web3 build")
   const [details, setDetails] = useState("")
+  const [captchaToken, setCaptchaToken] = useState("")
   const [result, setResult] = useState("")
   const [submitting, setSubmitting] = useState(false)
 
@@ -68,9 +69,6 @@ export function GetInTouch({
     event.preventDefault()
     setSubmitting(true)
     setResult("")
-
-    const captchaToken =
-      formRef.current?.querySelector<HTMLTextAreaElement>('textarea[name="h-captcha-response"]')?.value?.trim() ?? ""
 
     if (!captchaToken) {
       setSubmitting(false)
@@ -107,6 +105,8 @@ export function GetInTouch({
       setCompany("")
       setProjectType("Web3 build")
       setDetails("")
+      setCaptchaToken("")
+      captchaRef.current?.resetCaptcha()
     } catch {
       setResult("Something went wrong. Please try again.")
     } finally {
@@ -116,7 +116,6 @@ export function GetInTouch({
 
   return (
     <section id={id} className="rounded-[34px] border-[3px] border-black bg-white p-6 shadow-[8px_8px_0_#000] sm:p-8">
-      <Script src="https://web3forms.com/client/script.js" strategy="afterInteractive" />
       <div className="grid items-start gap-6 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="space-y-4">
           <p className="font-mono text-xs font-black uppercase tracking-wide text-black/60">get in touch</p>
@@ -144,7 +143,7 @@ export function GetInTouch({
             ))}
           </div>
 
-          <form ref={formRef} onSubmit={handleSubmit} className="grid gap-4 rounded-[30px] border-[3px] border-black bg-[#fff8ef] p-5 shadow-[6px_6px_0_#000]">
+          <form onSubmit={handleSubmit} className="grid gap-4 rounded-[30px] border-[3px] border-black bg-[#fff8ef] p-5 shadow-[6px_6px_0_#000]">
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="space-y-2 text-sm font-black text-black">
                 <span>Name</span>
@@ -216,10 +215,19 @@ export function GetInTouch({
 
             <div className="rounded-[24px] border-[3px] border-black bg-white p-4 shadow-[4px_4px_0_#000]">
               <p className="mb-3 text-sm font-black text-black">Spam protection</p>
-              <div
-                className="h-captcha"
-                data-captcha="true"
-                data-sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
+              <HCaptcha
+                ref={captchaRef}
+                sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
+                reCaptchaCompat={false}
+                onVerify={(token) => {
+                  setCaptchaToken(token)
+                  setResult("")
+                }}
+                onExpire={() => setCaptchaToken("")}
+                onError={() => {
+                  setCaptchaToken("")
+                  setResult("hCaptcha could not be verified. Please try again.")
+                }}
               />
             </div>
 
