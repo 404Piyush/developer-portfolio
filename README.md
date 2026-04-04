@@ -1,80 +1,63 @@
-# 🚀 Portfolio - Piyush Utkar
+# Piyush J. Utkar Portfolio
 
-Modern, responsive portfolio website showcasing full-stack development skills and projects.
+Data-backed developer portfolio built with Next.js 15 for Web3, systems, automation, and full-stack client work.
 
-**Live Demo**: https://dev-piyush.netlify.app/
+## Highlights
 
-## ✨ Features
+- Searchable project browser across GitHub repositories and verified client deliveries
+- Focused Web3 page with previous experience, portfolio proof, and direct contact paths
+- Lead-capture contact section with inquiry fields, LinkedIn, Upwork, GitHub, and Calendly
+- Source-driven content mapped from portfolio data instead of placeholder copy
+- Custom favicon generated from the project logo through the App Router icon pipeline
 
-- **Responsive Design** - Optimized for all devices
-- **Modern UI/UX** - Clean, professional interface with smooth animations
-- **Interactive Contact Form** - Functional form with email integration
-- **Project Showcase** - Dynamic filtering and detailed case studies
-- **Performance Optimized** - Fast loading with Vite build system
+## Stack
 
-## 🛠️ Tech Stack
+- Next.js 15
+- React 18
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- Lucide React
 
-- **Frontend**: React 18, Vite, Tailwind CSS
-- **Animations**: Framer Motion, GSAP
-- **3D Graphics**: Three.js, React Three Fiber
-- **Icons**: React Icons
-- **Email**: EmailJS integration
-- **Deployment**: Netlify/Vercel ready
+## Project Structure
 
-## 🚀 Quick Start
+```text
+portfolio/
+├── app/              # App Router pages, layout, favicon icon
+├── components/       # Reusable UI sections and interactive components
+├── data/             # Portfolio data assembled from source exports
+├── public/images/    # Screenshots and project assets
+├── export_*.json     # Upwork export data used by the site
+└── github_repo_data.json
+```
+
+## Local Development
 
 ```bash
-# Clone the repository
-git clone https://github.com/404Piyush/portfolio.git
-
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
-
-# Build for production
-npm run build
 ```
 
-## 📁 Project Structure
+Open http://localhost:3000
 
-```
-portfolio/
-├── src/
-│   ├── components/    # React components
-│   ├── styles/       # CSS and styling
-│   └── assets/       # Images and static files
-├── public/           # Public assets
-└── dist/            # Production build
-```
+## Scripts
 
-## 🔧 Scripts
+- `npm run dev` — start the development server
+- `npm run build` — create the production build
+- `npm run start` — run the production server
+- `npm run lint` — run ESLint
+- `npm run typecheck` — run TypeScript without emitting files
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
+## Contact
 
-## 🌐 Deployment
+- Email: [piyushutkarxb@gmail.com](mailto:piyushutkarxb@gmail.com)
+- GitHub: [404Piyush](https://github.com/404Piyush)
+- LinkedIn: [Piyush Utkar](https://www.linkedin.com/in/piyush-utkar-0489b12b2)
+- Upwork: [Piyush Utkar](https://www.upwork.com/freelancers/~01e9719b8739727b9c)
+- Calendly: [404piyush](https://calendly.com/404piyush)
 
-Configured for easy deployment on Netlify and Vercel:
+## Notes
 
-1. Push to GitHub
-2. Connect to Netlify/Vercel
-3. Deploy automatically with included configuration
-
-## 📱 Connect With Me
-
-- **Email**: [piyushutkar@outlook.com](mailto:piyushutkar@outlook.com)
-- **LinkedIn**: [Piyush Utkar](https://www.linkedin.com/in/piyush-utkar-0489b12b2/)
-- **GitHub**: [@404Piyush](https://github.com/404Piyush)
-- **Schedule a Call**: [calendly.com/piyushutkar](https://calendly.com/piyushutkar)
-
-## 📄 License
-
-MIT License - feel free to use this project as inspiration for your own portfolio!
-
----
-
-**Built with ❤️ using React & modern web technologies** 
+- The site intentionally avoids showing earnings or tracked-hour metrics.
+- Private work is surfaced through walkthrough requests instead of dead-end repository links.
+- The current content is shaped from real exports and repository metadata to keep claims grounded.
