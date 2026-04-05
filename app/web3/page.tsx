@@ -133,6 +133,7 @@ export default function Web3Page() {
 
       <MotionReveal delay={0.32}>
         <GetInTouch
+          accessKey={process.env.WEB3FORMS_API_KEY ?? ""}
           id="web3-contact"
           title="Need a Web3 engineer who can handle contracts, systems thinking, and product polish in the same room?"
           description="This page already does the proof work. What comes next should feel easy: send the brief, book a call, or drop enough context to start a serious conversation."

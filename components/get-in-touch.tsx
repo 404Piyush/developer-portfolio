@@ -1,15 +1,15 @@
 "use client"
 
-import HCaptcha from "@hcaptcha/react-hcaptcha"
 import Link from "next/link"
 import { BriefcaseBusiness, CalendarDays, Github, Linkedin, Mail, Send } from "lucide-react"
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { profile } from "@/data/portfolio"
 
 type GetInTouchProps = {
   id?: string
   title?: string
   description?: string
+  accessKey?: string
 }
 
 const links = [
@@ -54,14 +54,13 @@ export function GetInTouch({
   id = "contact",
   title = "Make it ridiculously easy for a serious client to reach out",
   description = "The pitch here is simple: sharp systems thinking, strong delivery range, and enough engineering taste to turn complex product ideas into something clean, fast, and convincing.",
+  accessKey = "",
 }: GetInTouchProps) {
-  const captchaRef = useRef<HCaptcha | null>(null)
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [company, setCompany] = useState("")
   const [projectType, setProjectType] = useState("Web3 build")
   const [details, setDetails] = useState("")
-  const [captchaToken, setCaptchaToken] = useState("")
   const [result, setResult] = useState("")
   const [submitting, setSubmitting] = useState(false)
 
@@ -70,26 +69,23 @@ export function GetInTouch({
     setSubmitting(true)
     setResult("")
 
-    if (!captchaToken) {
+    if (!accessKey) {
       setSubmitting(false)
-      setResult("Please complete the hCaptcha before sending your inquiry.")
+      setResult("Contact form is not configured yet.")
       return
     }
 
     try {
-      const response = await fetch("/api/contact", {
+      const formData = new FormData()
+      formData.append("access_key", accessKey)
+      formData.append("subject", `Portfolio inquiry • ${projectType}`)
+      formData.append("name", name)
+      formData.append("email", email)
+      formData.append("message", [`Project type: ${projectType}`, `Company: ${company || "-"}`, "", details].join("\n"))
+
+      const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          company,
-          projectType,
-          message: details,
-          captchaToken,
-        }),
+        body: formData,
       })
 
       const data = (await response.json()) as { success?: boolean; message?: string }
@@ -105,8 +101,6 @@ export function GetInTouch({
       setCompany("")
       setProjectType("Web3 build")
       setDetails("")
-      setCaptchaToken("")
-      captchaRef.current?.resetCaptcha()
     } catch {
       setResult("Something went wrong. Please try again.")
     } finally {
@@ -212,24 +206,6 @@ export function GetInTouch({
                 className="w-full resize-none rounded-2xl border-[3px] border-black bg-white px-4 py-3 text-sm font-medium text-black outline-none transition focus:-translate-y-0.5"
               />
             </label>
-
-            <div className="rounded-[24px] border-[3px] border-black bg-white p-4 shadow-[4px_4px_0_#000]">
-              <p className="mb-3 text-sm font-black text-black">Spam protection</p>
-              <HCaptcha
-                ref={captchaRef}
-                sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
-                reCaptchaCompat={false}
-                onVerify={(token) => {
-                  setCaptchaToken(token)
-                  setResult("")
-                }}
-                onExpire={() => setCaptchaToken("")}
-                onError={() => {
-                  setCaptchaToken("")
-                  setResult("hCaptcha could not be verified. Please try again.")
-                }}
-              />
-            </div>
 
             <div className="flex flex-wrap gap-3">
               <button

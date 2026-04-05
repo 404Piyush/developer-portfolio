@@ -241,6 +241,7 @@ export default function HomePage() {
 
       <MotionReveal delay={0.32}>
         <GetInTouch
+          accessKey={process.env.WEB3FORMS_API_KEY ?? ""}
           title="If the brief is ambitious, messy, technical, or all three, this is where the conversation starts"
           description="The point of this site is to make one impression clearly: you are not hiring a template-level developer, you are hiring someone who can think through systems, ship the product, and make the result feel sharp."
         />
