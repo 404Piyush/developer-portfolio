@@ -14,12 +14,10 @@ export function ThemeToggle() {
     if (saved === "dark" || saved === "light") {
       setTheme(saved)
       document.documentElement.dataset.theme = saved
-    } else {
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
-      const initial = prefersDark ? "dark" : "light"
-      setTheme(initial)
-      document.documentElement.dataset.theme = initial
     }
+    // Otherwise: leave the site in its default light theme.
+    // Do not auto-detect the OS preference — the cream/yellow palette is
+    // intentional and should not flip to dark behind the user's back.
   }, [])
 
   const toggle = () => {

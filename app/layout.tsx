@@ -74,8 +74,16 @@ export const viewport: Viewport = {
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  // Inline script to set data-theme="dark" on first paint if the user
+  // previously chose dark mode. Prevents FOUC. The site defaults to light
+  // (no data-theme attribute) for first-time visitors.
+  const themeScript = `(function(){try{var t=localStorage.getItem('pjulab-theme');if(t==='dark'){document.documentElement.dataset.theme='dark';}}catch(e){}})();`
+
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans text-ink`}>
         <SiteHeader />
         <main className="mx-auto w-full max-w-6xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">{children}</main>
