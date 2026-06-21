@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { MotionReveal } from "@/components/motion-reveal"
+import { Markdown } from "@/components/markdown"
 import { writingPosts } from "@/data/writing"
 
 export const metadata: Metadata = {
@@ -23,41 +24,32 @@ export default function WritingPage() {
             Notes from the work.
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-ink-soft">
-            Technical writeups on the projects I am shipping. Short, honest, and grounded in the code
-            I actually wrote. More posts land as I find the time to write them up properly.
+            Technical writeups on the projects I am shipping. Short, honest, grounded in the code I
+            actually wrote. More posts land as I find the time to write them up properly.
           </p>
         </section>
       </MotionReveal>
 
-      <div className="space-y-8">
+      <div className="space-y-10">
         {writingPosts.map((post, index) => (
           <MotionReveal key={post.slug} delay={index * 0.04}>
-            <article
-              className={`card p-6 sm:p-8 ${
-                index === 0 ? "bg-bg-elevated" : index === 1 ? "bg-aquamarine" : "bg-bg-muted"
-              }`}
-            >
-              <header>
-                <p className="font-mono text-xs font-bold text-ink">
+            <article>
+              <header className="border-b-[3px] border-border pb-5">
+                <p className="font-mono text-xs font-bold text-ink-muted">
                   {formatDate(post.date)} · {post.readingTime}
                 </p>
-                <h2 className="mt-2 text-2xl font-black leading-tight sm:text-3xl">{post.title}</h2>
-                <p className="mt-2 text-base leading-relaxed text-ink-soft">{post.excerpt}</p>
+                <h2 className="mt-2 text-3xl font-black leading-tight sm:text-4xl">{post.title}</h2>
+                <p className="mt-3 text-base leading-relaxed text-ink-soft">{post.excerpt}</p>
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {post.tags.map((tag) => (
-                    <span key={tag} className="tag bg-bg-elevated">
+                    <span key={tag} className="tag bg-bg-muted">
                       {tag}
                     </span>
                   ))}
                 </div>
               </header>
-
-              <div className="prose prose-sm mt-6 max-w-none">
-                {post.body.map((paragraph, pIndex) => (
-                  <p key={pIndex} className="text-sm leading-relaxed text-ink-soft">
-                    {paragraph}
-                  </p>
-                ))}
+              <div className="pt-5">
+                <Markdown source={post.body} />
               </div>
             </article>
           </MotionReveal>
@@ -65,7 +57,7 @@ export default function WritingPage() {
       </div>
 
       <MotionReveal>
-        <section className="card p-6 sm:p-8 text-center">
+        <section className="card mt-12 p-6 text-center sm:p-8">
           <p className="text-sm font-bold text-ink-soft">
             Want to read more? <Link href="/#contact" className="underline">Send a request</Link>{" "}
             and I will write the next one.
