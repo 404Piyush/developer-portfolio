@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server"
 
+export const runtime = "edge"
+
 type ContactPayload = {
   name?: string
   email?: string
   company?: string
   projectType?: string
   message?: string
-  captchaToken?: string
 }
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -15,7 +16,10 @@ export async function POST(request: Request) {
   const accessKey = process.env.WEB3FORMS_API_KEY
 
   if (!accessKey) {
-    return NextResponse.json({ success: false, message: "Contact form is not configured yet." }, { status: 500 })
+    return NextResponse.json(
+      { success: false, message: "Contact form is not configured. Use the mailto link instead." },
+      { status: 503 }
+    )
   }
 
   const body = (await request.json().catch(() => null)) as ContactPayload | null
@@ -25,7 +29,6 @@ export async function POST(request: Request) {
   const company = body?.company?.trim() ?? ""
   const projectType = body?.projectType?.trim() ?? "General inquiry"
   const message = body?.message?.trim() ?? ""
-  const captchaToken = body?.captchaToken?.trim() ?? ""
 
   if (!name || !email || !message) {
     return NextResponse.json(
@@ -34,12 +37,11 @@ export async function POST(request: Request) {
     )
   }
 
-  if (!captchaToken) {
-    return NextResponse.json({ success: false, message: "Please complete the hCaptcha challenge." }, { status: 400 })
-  }
-
   if (!emailPattern.test(email)) {
-    return NextResponse.json({ success: false, message: "Please enter a valid email address." }, { status: 400 })
+    return NextResponse.json(
+      { success: false, message: "Please enter a valid email address." },
+      { status: 400 }
+    )
   }
 
   const formData = new FormData()
@@ -48,33 +50,24 @@ export async function POST(request: Request) {
   formData.append("name", name)
   formData.append("email", email)
   formData.append("message", [`Project type: ${projectType}`, `Company: ${company || "-"}`, "", message].join("\n"))
-  formData.append("h-captcha-response", captchaToken)
 
-  const response = await fetch("https://api.web3forms.com/submit", {
-    method: "POST",
-    body: formData,
-  })
-
-  const responseText = await response.text()
-  const data = (() => {
-    try {
-      return (responseText ? JSON.parse(responseText) : null) as { success?: boolean; message?: string } | null
-    } catch {
-      return null
+  try {
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      body: formData,
+    })
+    const data = (await response.json()) as { success?: boolean; message?: string }
+    if (!response.ok || !data.success) {
+      return NextResponse.json(
+        { success: false, message: data.message ?? "Submission failed." },
+        { status: 502 }
+      )
     }
-  })()
-
-  if (!response.ok || !data?.success) {
+    return NextResponse.json({ success: true, message: "Message sent successfully." })
+  } catch {
     return NextResponse.json(
-      {
-        success: false,
-        message:
-          data?.message ??
-          (responseText ? `Web3Forms rejected the submission: ${responseText}` : "Web3Forms rejected the submission."),
-      },
-      { status: 502 }
+      { success: false, message: "Network error. Please email directly." },
+      { status: 500 }
     )
   }
-
-  return NextResponse.json({ success: true, message: "Message sent successfully." })
 }

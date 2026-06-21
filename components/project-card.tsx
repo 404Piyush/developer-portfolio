@@ -1,75 +1,67 @@
-import Image from "next/image"
 import Link from "next/link"
-import type { ProjectShowcaseItem } from "@/data/portfolio"
+import type { Project } from "@/data/projects"
 
-type ProjectCardProps = ProjectShowcaseItem
+type ProjectCardProps = {
+  project: Project
+  size?: "default" | "compact"
+}
 
-export function ProjectCard({ name, subtitle, description, visibility, stack, href, ctaLabel, accent, image, year, source, category, tags }: ProjectCardProps) {
+const accentBg: Record<string, string> = {
+  deepSkyBlue: "bg-deepSkyBlue",
+  aquamarine: "bg-aquamarine",
+  deepPink: "bg-deepPink",
+  bananaCream: "bg-bananaCream",
+  lavender: "bg-lavender",
+}
+
+export function ProjectCard({ project, size = "default" }: ProjectCardProps) {
+  const accent = accentBg[project.accent] ?? "bg-bananaCream"
+
   return (
-    <article className="group overflow-hidden rounded-[30px] border-[3px] border-black bg-white shadow-[8px_8px_0_#000] transition hover:-translate-y-1">
-      <div className={`border-b-[3px] border-black p-4 ${accent}`}>
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <span className="rounded-full border-[2px] border-black bg-white px-3 py-1 text-xs font-black text-black">
-            {visibility}
-          </span>
-          <span className="font-mono text-xs font-black text-black">{year}</span>
+    <article className="card group flex flex-col">
+      <header className={`flex flex-wrap items-center justify-between gap-2 border-b-[3px] border-border ${accent} px-5 py-3`}>
+        <span className="tag bg-bg-elevated">{project.visibility}</span>
+        <span className="font-mono text-xs font-bold text-ink">{project.year}</span>
+      </header>
+
+      <div className="flex flex-1 flex-col p-6">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="tag bg-bg-elevated">{project.category}</span>
+          <span className="tag bg-bg-muted">Solo build</span>
         </div>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <span className="rounded-xl border-[2px] border-black bg-white px-3 py-1 text-[11px] font-black uppercase tracking-wide text-black">
-            {source}
-          </span>
-          <span className="rounded-xl border-[2px] border-black bg-white px-3 py-1 text-[11px] font-black uppercase tracking-wide text-black">
-            {category}
-          </span>
-        </div>
-      </div>
-      {image ? (
-        <div className="relative h-52 border-b-[3px] border-black bg-[#f8f8f8]">
-          <Image src={image} alt={name} fill className="object-cover" />
-        </div>
-      ) : (
-        <div className={`flex h-52 items-center justify-center border-b-[3px] border-black ${accent}`}>
-          <div className="space-y-3 px-6 text-center">
-            <div className="rotate-[-4deg] rounded-2xl border-[3px] border-black bg-white px-6 py-4 font-mono text-xl font-black text-black shadow-[5px_5px_0_#000]">
-              {name}
-            </div>
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              {tags.slice(0, 2).map((tag) => (
-                <span key={tag} className="rounded-full border-[2px] border-black bg-white px-3 py-1 text-[11px] font-black uppercase tracking-wide text-black">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-      <div className="p-6">
-        <div className="mb-4">
-          <h3 className="text-2xl font-black text-black">{name}</h3>
-          <p className="text-sm font-medium text-black/70">{subtitle}</p>
-        </div>
-        <p className="text-sm leading-relaxed text-black/75">{description}</p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {stack.map((item) => (
-            <span key={item} className="rounded-xl border-[2px] border-black bg-[#fff8ef] px-2.5 py-1 text-xs font-bold text-black">
+
+        <h3 className="mt-3 text-2xl font-black text-ink">
+          <Link href={`/work/${project.slug}`} className="hover:underline">
+            {project.name}
+          </Link>
+        </h3>
+        <p className="mt-1 text-sm font-medium text-ink-soft">{project.tagline}</p>
+
+        <p className="mt-4 text-sm leading-relaxed text-ink-soft">{project.description}</p>
+
+        <div className="mt-4 flex flex-wrap gap-1.5">
+          {project.stack.slice(0, size === "compact" ? 4 : 6).map((item) => (
+            <span key={item} className="tag bg-bg-muted">
               {item}
             </span>
           ))}
         </div>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {tags.slice(0, 4).map((item) => (
-            <span key={item} className="rounded-xl border-[2px] border-black bg-white px-2.5 py-1 text-[11px] font-black uppercase tracking-wide text-black/70">
-              {item}
-            </span>
-          ))}
+
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-5">
+          <Link href={`/work/${project.slug}`} className="btn btn-primary">
+            Read case study →
+          </Link>
+          {project.links[0] ? (
+            <a
+              href={project.links[0].href}
+              target={project.links[0].href.startsWith("http") ? "_blank" : undefined}
+              rel={project.links[0].href.startsWith("http") ? "noreferrer" : undefined}
+              className="text-xs font-bold text-ink-muted underline-offset-2 hover:underline"
+            >
+              {project.links[0].label}
+            </a>
+          ) : null}
         </div>
-        <Link
-          href={href}
-          target="_blank"
-          className="mt-5 inline-flex rounded-xl border-[3px] border-black bg-deepPink px-4 py-2 text-sm font-black text-black shadow-[3px_3px_0_#000] transition hover:-translate-y-0.5"
-        >
-          {ctaLabel} →
-        </Link>
       </div>
     </article>
   )

@@ -1,251 +1,283 @@
-import Image from "next/image"
 import Link from "next/link"
+import { ArrowDown, ArrowRight, Mail } from "lucide-react"
 import { GetInTouch } from "@/components/get-in-touch"
+import { MetricsBar } from "@/components/metrics-bar"
 import { MotionReveal } from "@/components/motion-reveal"
-import { ProjectBrowser } from "@/components/project-browser"
-import { SystemStatus } from "@/components/system-status"
-import {
-  allProjects,
-  clientSignals,
-  credibilityStats,
-  experienceTimeline,
-  featuredProjects,
-  focusAreas,
-  introCards,
-  profile,
-  projectSearchHints,
-  upworkWins,
-} from "@/data/portfolio"
+import { ProjectCard } from "@/components/project-card"
+import { profile } from "@/data/profile"
+import { featuredProjects } from "@/data/projects"
+import { freelance, freelanceSummary } from "@/data/freelance"
+import { skills } from "@/data/skills"
 
 export default function HomePage() {
+  const publicRepos = featuredProjects.filter((p) => p.visibility === "Public").length
+
   return (
-    <div className="space-y-12 pb-10">
+    <div className="space-y-20 pb-16 pt-2">
+      {/* HERO */}
       <MotionReveal className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-        <section className="space-y-6 rounded-[34px] border-[3px] border-black bg-white p-6 shadow-[10px_10px_0_#000] sm:p-8">
+        <section className="card relative overflow-hidden p-6 sm:p-8">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="rotate-[-3deg] rounded-2xl border-[3px] border-black bg-lavender px-4 py-2 font-mono text-xs font-black text-black">
-              {profile.title}
+            <span className="rounded-2xl border-[3px] border-border bg-lavender px-3 py-1 font-mono text-xs font-black text-ink">
+              {profile.role}
             </span>
-            <span className="rounded-2xl border-[3px] border-black bg-bananaCream px-4 py-2 text-xs font-black text-black">
+            <span className="rounded-2xl border-[3px] border-border bg-bananaCream px-3 py-1 text-xs font-black text-ink">
               {profile.location}
             </span>
+            <span className="rounded-2xl border-[3px] border-border bg-aquamarine px-3 py-1 text-xs font-black text-ink">
+              Open to work
+            </span>
           </div>
-          <div className="space-y-4">
-            <h1 className="max-w-4xl text-4xl font-black leading-none text-black sm:text-6xl">{profile.hero}</h1>
-            <p className="max-w-3xl text-base leading-relaxed text-black/75 sm:text-lg">{profile.summary}</p>
-            <p className="max-w-3xl text-base leading-relaxed text-black/75">
-              Web3 clients, automation clients, and product clients all get the same thing here: proof, range, and a fast way to contact you without hunting around the site.
-            </p>
+
+          <h1 className="mt-6 max-w-3xl text-4xl font-black leading-[1.05] sm:text-6xl">
+            Self-taught engineer shipping across{" "}
+            <span className="bg-deepPink px-2 text-black">Web3</span>,{" "}
+            <span className="bg-deepSkyBlue px-2 text-black">full-stack</span>, and{" "}
+            <span className="bg-aquamarine px-2 text-black">systems</span>.
+          </h1>
+
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-ink-soft sm:text-lg">
+            {profile.summary}
+          </p>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/work" className="btn btn-primary">
+              View selected work
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link href={profile.resume.href} className="btn">
+              {profile.resume.label}
+            </Link>
+            <Link href="#contact" className="btn btn-secondary">
+              <Mail className="h-4 w-4" />
+              Get in touch
+            </Link>
           </div>
-          <SystemStatus />
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href={profile.github}
-              target="_blank"
-              className="rounded-2xl border-[3px] border-black bg-deepSkyBlue px-5 py-3 text-sm font-black text-black shadow-[4px_4px_0_#000] transition hover:-translate-y-0.5"
-            >
-              GitHub →
-            </Link>
-            <Link
-              href={profile.upwork}
-              target="_blank"
-              className="rounded-2xl border-[3px] border-black bg-deepPink px-5 py-3 text-sm font-black text-black shadow-[4px_4px_0_#000] transition hover:-translate-y-0.5"
-            >
-              Upwork →
-            </Link>
-            <a
-              href={`mailto:${profile.email}`}
-              className="rounded-2xl border-[3px] border-black bg-aquamarine px-5 py-3 text-sm font-black text-black shadow-[4px_4px_0_#000] transition hover:-translate-y-0.5"
-            >
-              email me →
-            </a>
-            <Link
-              href="#contact"
-              className="rounded-2xl border-[3px] border-black bg-bananaCream px-5 py-3 text-sm font-black text-black shadow-[4px_4px_0_#000] transition hover:-translate-y-0.5"
-            >
-              get in touch →
-            </Link>
+
+          <div className="mt-6">
+            <MetricsBar
+              publicRepos={publicRepos + 12}
+              totalJobs={freelanceSummary.totalJobs}
+              memberSince={freelanceSummary.memberSince}
+            />
           </div>
         </section>
 
-        <aside className="space-y-4">
-          <div className="rotate-[2deg] overflow-hidden rounded-[32px] border-[3px] border-black bg-bananaCream shadow-[10px_10px_0_#000]">
-            <div className="relative h-[320px]">
-              <Image src="/images/professional-photo.jpg" alt="Piyush J. Utkar" fill className="object-cover" />
-            </div>
-          </div>
-          <div className="rotate-[-2deg] rounded-[28px] border-[3px] border-black bg-white p-5 shadow-[8px_8px_0_#000]">
-            <p className="font-mono text-xs font-black text-black/60">what a client can verify fast</p>
-            <div className="mt-3 space-y-3">
-              {profile.highlights.map((item) => (
-                <div key={item} className="rounded-2xl border-[3px] border-black bg-[#fff8ef] p-3 text-sm font-bold text-black">
-                  {item}
-                </div>
-              ))}
-            </div>
+        <aside className="card p-6 sm:p-8">
+          <p className="eyebrow text-ink-muted">What I am building right now</p>
+          <ul className="mt-4 space-y-3 text-sm">
+            <li className="rounded-2xl border-[3px] border-border bg-bg-muted p-3 font-bold">
+              <span className="text-deepPink">→</span> Hardening Veltrix L2 devnet, expanding the explorer.
+            </li>
+            <li className="rounded-2xl border-[3px] border-border bg-bg-muted p-3 font-bold">
+              <span className="text-deepSkyBlue">→</span> Continuing the gpu-engineering curriculum — profiling and concurrency.
+            </li>
+            <li className="rounded-2xl border-[3px] border-border bg-bg-muted p-3 font-bold">
+              <span className="text-aquamarine">→</span> Selected freelance work on Discord bots and full-stack SaaS.
+            </li>
+          </ul>
+          <div className="mt-5 border-t-[3px] border-border pt-4">
+            <p className="eyebrow text-ink-muted">Currently reading</p>
+            <p className="mt-2 text-sm font-bold">Computer Systems: A Programmer&rsquo;s Perspective</p>
           </div>
         </aside>
       </MotionReveal>
 
-      <MotionReveal delay={0.08} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {credibilityStats.map((item, index) => (
-          <div
-            key={item.label}
-            className={`${item.tone} ${index % 2 === 0 ? "rotate-[-2deg]" : "rotate-[2deg]"} rounded-[28px] border-[3px] border-black p-5 shadow-[6px_6px_0_#000]`}
-          >
-            <p className="font-mono text-xs font-black uppercase tracking-wide text-black/65">{item.label}</p>
-            <p className="mt-2 text-3xl font-black text-black">{item.value}</p>
-          </div>
-        ))}
-      </MotionReveal>
-
-      <MotionReveal delay={0.12} className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-        <section className="rounded-[32px] border-[3px] border-black bg-white p-6 shadow-[8px_8px_0_#000]">
-          <p className="font-mono text-xs font-black uppercase tracking-wide text-black/60">where I create the most leverage</p>
-          <div className="mt-4 space-y-3">
-            {focusAreas.map((item, index) => (
-              <div
-                key={item.title}
-                className={`rounded-2xl border-[3px] border-black p-4 text-sm font-bold text-black ${
-                  index % 4 === 0
-                    ? "bg-bananaCream"
-                    : index % 4 === 1
-                      ? "bg-aquamarine"
-                      : index % 4 === 2
-                        ? "bg-deepSkyBlue"
-                        : "bg-lavender"
-                }`}
-              >
-                <p className="text-sm font-black uppercase tracking-wide">{item.title}</p>
-                <p className="mt-2 text-sm font-medium leading-relaxed text-black/80">{item.body}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="grid gap-4 sm:grid-cols-3">
-          {introCards.map((card, index) => (
-            <article
-              key={card.title}
-              className={`${card.color} ${index === 1 ? "rotate-[2deg]" : "rotate-[-2deg]"} rounded-[28px] border-[3px] border-black p-5 shadow-[6px_6px_0_#000]`}
+      {/* HIGHLIGHTS */}
+      <MotionReveal>
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {profile.highlights.map((highlight, index) => (
+            <li
+              key={highlight}
+              className={`card-flat p-4 text-sm font-bold leading-relaxed text-ink ${
+                index % 4 === 0
+                  ? "bg-deepSkyBlue"
+                  : index % 4 === 1
+                    ? "bg-aquamarine"
+                    : index % 4 === 2
+                      ? "bg-bananaCream"
+                      : "bg-lavender"
+              }`}
             >
-              <p className="font-mono text-xs font-black uppercase tracking-wide text-black/60">{card.title}</p>
-              <p className="mt-3 text-sm font-bold leading-relaxed text-black/80">{card.body}</p>
-            </article>
+              {highlight}
+            </li>
           ))}
-        </section>
+        </ul>
       </MotionReveal>
 
-      <MotionReveal delay={0.16}>
-        <div className="mb-5 flex items-center justify-between gap-3">
+      {/* WHAT I BUILD */}
+      <MotionReveal>
+        <header className="mb-6 flex items-end justify-between gap-4">
           <div>
-            <p className="font-mono text-xs font-black uppercase tracking-wide text-black/60">featured proof</p>
-            <h2 className="text-3xl font-black text-black">Projects that explain your range in one glance</h2>
+            <p className="eyebrow text-ink-muted">What I build</p>
+            <h2 className="mt-1 text-3xl font-black">Three lanes, one standard.</h2>
           </div>
-          <Link
-            href="/work"
-            className="rounded-2xl border-[3px] border-black bg-white px-4 py-2 text-sm font-black text-black shadow-[4px_4px_0_#000]"
-          >
-            browse the full catalog
+          <Link href="/work" className="hidden text-sm font-bold underline-offset-4 hover:underline sm:inline">
+            See all projects →
+          </Link>
+        </header>
+        <div className="grid gap-4 lg:grid-cols-3">
+          <LaneCard
+            title="Web3"
+            accent="bg-deepPink"
+            description="OP-Stack L2s, smart contracts, AMMs, bridges, Solana cNFT minting, multi-chain swap tooling."
+            bullets={["Solidity + Foundry", "OP Stack / Arbitrum / Tron", "React + ethers frontends"]}
+            href="/web3"
+          />
+          <LaneCard
+            title="Full-Stack"
+            accent="bg-deepSkyBlue"
+            description="Async APIs, real-time control planes, observability platforms, role-based SaaS, production deploys."
+            bullets={["FastAPI + Next.js 15", "RabbitMQ + Postgres", "Render + Vercel + Docker"]}
+            href="/work?category=Full-Stack"
+          />
+          <LaneCard
+            title="Systems (C)"
+            accent="bg-aquamarine"
+            description="Public 3-year C/GPU roadmap. Custom allocators, POSIX tooling, microbenchmarks, and CI on Linux + macOS."
+            bullets={["C11 + POSIX", "273 passing assertions", "Public curriculum"]}
+            href="/work?category=Systems"
+          />
+        </div>
+      </MotionReveal>
+
+      {/* SELECTED WORK */}
+      <MotionReveal>
+        <header className="mb-6 flex items-end justify-between gap-4">
+          <div>
+            <p className="eyebrow text-ink-muted">Selected work</p>
+            <h2 className="mt-1 text-3xl font-black">Six case studies with proof.</h2>
+          </div>
+          <Link href="/work" className="text-sm font-bold underline-offset-4 hover:underline">
+            Full project browser →
+          </Link>
+        </header>
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {featuredProjects.slice(0, 6).map((project) => (
+            <ProjectCard key={project.slug} project={project} />
+          ))}
+        </div>
+      </MotionReveal>
+
+      {/* RECENT FREELANCE */}
+      <MotionReveal>
+        <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="eyebrow text-ink-muted">Recent freelance</p>
+            <h2 className="mt-1 text-3xl font-black">{freelanceSummary.totalJobs}+ delivered client jobs.</h2>
+          </div>
+          <p className="font-mono text-xs font-bold text-ink-muted">
+            Average rating {freelanceSummary.averageRating} · Member since {freelanceSummary.memberSince}
+          </p>
+        </header>
+        <div className="grid gap-4 lg:grid-cols-2">
+          {freelance
+            .filter((job) => job.rating === 5)
+            .slice(0, 4)
+            .map((job, index) => (
+              <article
+                key={job.title}
+                className={`card p-5 ${index % 2 === 0 ? "bg-bananaCream" : "bg-aquamarine"}`}
+              >
+                <header className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="tag bg-bg-elevated">{job.category}</span>
+                  <span className="font-mono text-xs font-bold text-ink">{job.period}</span>
+                </header>
+                <h3 className="mt-3 text-lg font-black text-ink">{job.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-soft">{job.outcome}</p>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {job.stack.map((item) => (
+                    <span key={item} className="tag bg-bg-elevated">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </article>
+            ))}
+        </div>
+        <div className="mt-4 text-right">
+          <Link href="/work?category=Bots" className="text-sm font-bold underline-offset-4 hover:underline">
+            See more on the Work page →
           </Link>
         </div>
-        <div className="grid auto-rows-[minmax(180px,auto)] gap-4 md:grid-cols-6">
-          {featuredProjects.map((project, index) => (
+      </MotionReveal>
+
+      {/* SKILLS */}
+      <MotionReveal>
+        <header className="mb-6">
+          <p className="eyebrow text-ink-muted">Skills</p>
+          <h2 className="mt-1 text-3xl font-black">What I work with daily.</h2>
+        </header>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {skills.map((group, index) => (
             <article
-              key={project.name}
-              className={`${project.accent} ${
-                index === 0 ? "md:col-span-3 md:row-span-2" : "md:col-span-3"
-              } rounded-[30px] border-[3px] border-black p-5 shadow-[8px_8px_0_#000]`}
+              key={group.title}
+              className={`card p-5 ${index % 2 === 0 ? "bg-bg-elevated" : "bg-bg-muted"}`}
             >
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="rounded-full border-[2px] border-black bg-white px-3 py-1 text-xs font-black text-black">
-                  {project.source} • {project.category}
-                </span>
-                <span className="rotate-[-3deg] rounded-xl border-[2px] border-black bg-white px-3 py-1 font-mono text-xs font-black text-black">
-                  {project.visibility}
-                </span>
-              </div>
-              <h3 className="mt-4 text-2xl font-black text-black">{project.name}</h3>
-              <p className="mt-2 text-xs font-black uppercase tracking-wide text-black/60">{project.subtitle}</p>
-              <p className="mt-2 text-sm leading-relaxed text-black/80">{project.description}</p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {project.stack.map((item) => (
-                  <span key={item} className="rounded-xl border-[2px] border-black bg-white px-2.5 py-1 text-xs font-bold text-black">
+              <h3 className="text-sm font-black uppercase tracking-wide">{group.title}</h3>
+              <ul className="mt-3 flex flex-wrap gap-1.5">
+                {group.items.map((item) => (
+                  <li key={item} className="tag bg-bg-elevated">
                     {item}
-                  </span>
+                  </li>
                 ))}
-              </div>
-              <Link
-                href={project.href}
-                target="_blank"
-                className="mt-5 inline-flex rounded-xl border-[3px] border-black bg-white px-4 py-2 text-sm font-black text-black shadow-[3px_3px_0_#000] transition hover:-translate-y-0.5"
-              >
-                {project.ctaLabel} →
-              </Link>
+              </ul>
             </article>
           ))}
         </div>
       </MotionReveal>
 
-      <MotionReveal delay={0.2} className="grid gap-4 lg:grid-cols-[1fr_1fr]">
-        <section className="rounded-[32px] border-[3px] border-black bg-white p-6 shadow-[8px_8px_0_#000]">
-          <p className="font-mono text-xs font-black uppercase tracking-wide text-black/60">recent delivery lanes</p>
-          <div className="mt-4 space-y-3">
-            {upworkWins.map((item) => (
-              <div key={item.title} className={`${item.tone} rounded-2xl border-[3px] border-black p-4`}>
-                <p className="text-sm font-black text-black">{item.title}</p>
-                <p className="mt-1 font-mono text-xs font-bold text-black/65">{item.meta}</p>
-                <p className="mt-2 text-sm text-black/75">{item.detail}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="rounded-[32px] border-[3px] border-black bg-lavender p-6 shadow-[8px_8px_0_#000]">
-          <p className="font-mono text-xs font-black uppercase tracking-wide text-black/60">career shape</p>
-          <div className="mt-4 space-y-3">
-            {experienceTimeline.map((item) => (
-              <div key={item.title} className={`${item.tone} rounded-2xl border-[3px] border-black p-4`}>
-                <p className="text-sm font-black text-black">{item.title}</p>
-                <p className="mt-1 font-mono text-xs font-black uppercase tracking-wide text-black/65">{item.period}</p>
-                <p className="mt-2 text-sm leading-relaxed text-black/80">{item.detail}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+      {/* CONTACT */}
+      <MotionReveal>
+        <GetInTouch />
       </MotionReveal>
 
-      <MotionReveal delay={0.24}>
-        <section className="rounded-[34px] border-[3px] border-black bg-white p-6 shadow-[8px_8px_0_#000] sm:p-8">
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="font-mono text-xs font-black uppercase tracking-wide text-black/60">searchable portfolio</p>
-              <h2 className="text-3xl font-black text-black">Everything worth showing, surfaced in one place</h2>
-            </div>
-            <span className="rotate-[-2deg] rounded-2xl border-[3px] border-black bg-bananaCream px-4 py-2 font-mono text-xs font-black text-black">
-              {allProjects.length} visible projects
-            </span>
-          </div>
-          <ProjectBrowser projects={allProjects} hints={projectSearchHints} />
-        </section>
-      </MotionReveal>
-
-      <MotionReveal delay={0.28} className="grid gap-4 lg:grid-cols-3">
-        {clientSignals.map((item) => (
-          <article key={item.source} className={`${item.tone} rounded-[28px] border-[3px] border-black p-5 shadow-[6px_6px_0_#000]`}>
-            <p className="text-sm font-black leading-relaxed text-black">{item.quote}</p>
-            <p className="mt-4 font-mono text-xs font-black uppercase tracking-wide text-black/65">{item.source}</p>
-          </article>
-        ))}
-      </MotionReveal>
-
-      <MotionReveal delay={0.32}>
-        <GetInTouch
-          accessKey={process.env.WEB3FORMS_API_KEY ?? ""}
-          title="If the brief is ambitious, messy, technical, or all three, this is where the conversation starts"
-          description="The point of this site is to make one impression clearly: you are not hiring a template-level developer, you are hiring someone who can think through systems, ship the product, and make the result feel sharp."
-        />
-      </MotionReveal>
+      {/* JUMP */}
+      <div className="flex justify-center pt-4">
+        <a
+          href="#contact"
+          className="inline-flex items-center gap-2 rounded-full border-[3px] border-border bg-bg-elevated px-5 py-2 text-xs font-bold shadow-[3px_3px_0_0_var(--border)] hover:-translate-y-0.5"
+        >
+          <ArrowDown className="h-3.5 w-3.5" />
+          Jump to contact
+        </a>
+      </div>
     </div>
+  )
+}
+
+function LaneCard({
+  title,
+  description,
+  bullets,
+  href,
+  accent,
+}: {
+  title: string
+  description: string
+  bullets: string[]
+  href: string
+  accent: string
+}) {
+  return (
+    <article className="card p-6">
+      <span
+        className={`inline-block rounded-xl border-[3px] border-border px-3 py-1 font-mono text-xs font-black text-ink ${accent}`}
+      >
+        {title}
+      </span>
+      <p className="mt-4 text-sm leading-relaxed text-ink-soft">{description}</p>
+      <ul className="mt-4 space-y-2 text-sm font-bold">
+        {bullets.map((bullet) => (
+          <li key={bullet} className="flex items-start gap-2">
+            <span className="text-ink-muted">→</span>
+            {bullet}
+          </li>
+        ))}
+      </ul>
+      <Link href={href} className="mt-5 inline-flex text-sm font-bold underline-offset-4 hover:underline">
+        Browse {title} work →
+      </Link>
+    </article>
   )
 }

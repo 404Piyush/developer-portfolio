@@ -1,251 +1,238 @@
 "use client"
 
+import { Briefcase, CalendarDays, Github, Linkedin, Mail, Send } from "lucide-react"
 import Link from "next/link"
-import { BriefcaseBusiness, CalendarDays, Github, Linkedin, Mail, Send } from "lucide-react"
 import { useState } from "react"
-import { profile } from "@/data/portfolio"
+import { profile } from "@/data/profile"
 
-type GetInTouchProps = {
-  id?: string
-  title?: string
-  description?: string
-  accessKey?: string
-}
-
-const links = [
+const linkItems = [
   {
     label: "GitHub",
-    href: profile.github,
+    href: profile.socials.find((s) => s.label === "GitHub")!.href,
     icon: Github,
-    tone: "bg-deepSkyBlue",
-    detail: "See the repositories",
+    accent: "bg-deepSkyBlue",
+    detail: "Public repositories",
   },
   {
     label: "LinkedIn",
-    href: profile.linkedin,
+    href: profile.socials.find((s) => s.label === "LinkedIn")!.href,
     icon: Linkedin,
-    tone: "bg-aquamarine",
+    accent: "bg-aquamarine",
     detail: "Professional profile",
   },
   {
     label: "Upwork",
-    href: profile.upwork,
-    icon: BriefcaseBusiness,
-    tone: "bg-deepPink",
+    href: profile.socials.find((s) => s.label === "Upwork")!.href,
+    icon: Briefcase,
+    accent: "bg-deepPink",
     detail: "Verified client history",
   },
   {
     label: "Calendly",
-    href: profile.calendly,
+    href: profile.socials.find((s) => s.label === "Calendly")!.href,
     icon: CalendarDays,
-    tone: "bg-bananaCream",
+    accent: "bg-bananaCream",
     detail: "Schedule a meeting",
   },
   {
     label: "Email",
     href: `mailto:${profile.email}`,
     icon: Mail,
-    tone: "bg-lavender",
+    accent: "bg-lavender",
     detail: profile.email,
   },
 ]
 
-export function GetInTouch({
-  id = "contact",
-  title = "Make it ridiculously easy for a serious client to reach out",
-  description = "The pitch here is simple: sharp systems thinking, strong delivery range, and enough engineering taste to turn complex product ideas into something clean, fast, and convincing.",
-  accessKey = "",
-}: GetInTouchProps) {
+export function GetInTouch() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [company, setCompany] = useState("")
   const [projectType, setProjectType] = useState("Web3 build")
   const [details, setDetails] = useState("")
-  const [result, setResult] = useState("")
+  const [result, setResult] = useState<{ type: "idle" | "ok" | "err"; message: string }>({
+    type: "idle",
+    message: "",
+  })
   const [submitting, setSubmitting] = useState(false)
+
+  const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setSubmitting(true)
-    setResult("")
+    setResult({ type: "idle", message: "" })
 
     if (!accessKey) {
+      // Fallback: open the user's mail client with a pre-filled message
+      const subject = encodeURIComponent(`Portfolio inquiry — ${projectType}`)
+      const body = encodeURIComponent(
+        `Hi Piyush,\n\nProject type: ${projectType}\nCompany: ${company || "-"}\n\n${details}\n\n— ${name} (${email})`
+      )
+      window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`
+      setResult({ type: "ok", message: "Opening your mail client — finish sending from there." })
       setSubmitting(false)
-      setResult("Contact form is not configured yet.")
       return
     }
 
     try {
       const formData = new FormData()
       formData.append("access_key", accessKey)
-      formData.append("subject", `Portfolio inquiry • ${projectType}`)
+      formData.append("subject", `Portfolio inquiry — ${projectType}`)
       formData.append("name", name)
       formData.append("email", email)
-      formData.append("message", [`Project type: ${projectType}`, `Company: ${company || "-"}`, "", details].join("\n"))
+      formData.append("message", `Project type: ${projectType}\nCompany: ${company || "-"}\n\n${details}`)
 
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         body: formData,
       })
-
       const data = (await response.json()) as { success?: boolean; message?: string }
-
       if (!response.ok || !data.success) {
-        setResult(data.message ?? "Something went wrong. Please try again.")
+        setResult({ type: "err", message: data.message ?? "Submission failed." })
         return
       }
-
-      setResult("Success! Your message has been sent.")
+      setResult({ type: "ok", message: "Message sent. I will reply within 24 hours." })
       setName("")
       setEmail("")
       setCompany("")
       setProjectType("Web3 build")
       setDetails("")
     } catch {
-      setResult("Something went wrong. Please try again.")
+      setResult({ type: "err", message: "Network error. Please email me directly." })
     } finally {
       setSubmitting(false)
     }
   }
 
   return (
-    <section id={id} className="rounded-[34px] border-[3px] border-black bg-white p-6 shadow-[8px_8px_0_#000] sm:p-8">
-      <div className="grid items-start gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-        <div className="space-y-4">
-          <p className="font-mono text-xs font-black uppercase tracking-wide text-black/60">get in touch</p>
-          <h2 className="text-3xl font-black leading-tight text-black sm:text-4xl">{title}</h2>
-          <p className="max-w-2xl text-sm leading-relaxed text-black/75 sm:text-base">{description}</p>
-          <p className="max-w-2xl text-sm leading-relaxed text-black/75">
-            If the client wants someone who can translate rough ambition into shippable software, this section should feel like the obvious next step.
+    <section id="contact" className="card p-6 sm:p-8">
+      <div className="grid items-start gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="space-y-5">
+          <p className="eyebrow text-ink-muted">Get in touch</p>
+          <h2 className="text-3xl font-black leading-tight sm:text-4xl">
+            Brief me on what you are building.
+          </h2>
+          <p className="max-w-2xl text-sm leading-relaxed text-ink-soft sm:text-base">
+            The fastest way to start a working conversation. Tell me the shape of the project, the blockers,
+            and the kind of help you want. I reply within 24 hours, IST or otherwise.
           </p>
-          <div className="flex flex-wrap gap-2">
-            {["Web3 builds", "Discord automation", "Systems tooling", "Full-stack products"].map((item, index) => (
-              <span
-                key={item}
-                className={`rounded-xl border-[3px] border-black px-3 py-2 text-xs font-black uppercase tracking-wide text-black ${
-                  index % 4 === 0
-                    ? "bg-bananaCream"
-                    : index % 4 === 1
-                      ? "bg-aquamarine"
-                      : index % 4 === 2
-                        ? "bg-deepSkyBlue"
-                        : "bg-lavender"
-                }`}
-              >
-                {item}
-              </span>
-            ))}
-          </div>
 
-          <form onSubmit={handleSubmit} className="grid gap-4 rounded-[30px] border-[3px] border-black bg-[#fff8ef] p-5 shadow-[6px_6px_0_#000]">
+          <form
+            onSubmit={handleSubmit}
+            className="grid gap-4 rounded-3xl border-[3px] border-border bg-bg-muted p-5 shadow-[5px_5px_0_0_var(--border)]"
+          >
             <div className="grid gap-4 sm:grid-cols-2">
-              <label className="space-y-2 text-sm font-black text-black">
+              <label className="space-y-1.5 text-sm font-bold">
                 <span>Name</span>
                 <input
                   type="text"
-                  name="name"
+                  required
                   value={name}
                   onChange={(event) => setName(event.target.value)}
+                  className="w-full rounded-2xl border-[3px] border-border bg-bg-elevated px-4 py-3 text-sm font-medium outline-none focus:-translate-y-0.5"
                   placeholder="Your name"
-                  required
-                  className="w-full rounded-2xl border-[3px] border-black bg-white px-4 py-3 text-sm font-medium text-black outline-none transition focus:-translate-y-0.5"
                 />
               </label>
-              <label className="space-y-2 text-sm font-black text-black">
+              <label className="space-y-1.5 text-sm font-bold">
                 <span>Email</span>
                 <input
                   type="email"
-                  name="email"
+                  required
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
+                  className="w-full rounded-2xl border-[3px] border-border bg-bg-elevated px-4 py-3 text-sm font-medium outline-none focus:-translate-y-0.5"
                   placeholder="you@company.com"
-                  required
-                  className="w-full rounded-2xl border-[3px] border-black bg-white px-4 py-3 text-sm font-medium text-black outline-none transition focus:-translate-y-0.5"
                 />
               </label>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-[0.9fr_1.1fr]">
-              <label className="space-y-2 text-sm font-black text-black">
+              <label className="space-y-1.5 text-sm font-bold">
                 <span>Project type</span>
                 <select
-                  name="projectType"
                   value={projectType}
                   onChange={(event) => setProjectType(event.target.value)}
-                  className="w-full rounded-2xl border-[3px] border-black bg-white px-4 py-3 text-sm font-medium text-black outline-none transition focus:-translate-y-0.5"
+                  className="w-full rounded-2xl border-[3px] border-border bg-bg-elevated px-4 py-3 text-sm font-medium outline-none focus:-translate-y-0.5"
                 >
-                  {["Web3 build", "Full-stack product", "Discord automation", "Backend systems", "Something custom"].map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
+                  {["Web3 build", "Full-stack product", "Discord automation", "Backend systems", "Something custom"].map(
+                    (option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    )
+                  )}
                 </select>
               </label>
-              <label className="space-y-2 text-sm font-black text-black">
+              <label className="space-y-1.5 text-sm font-bold">
                 <span>Company or team</span>
                 <input
                   type="text"
-                  name="company"
                   value={company}
                   onChange={(event) => setCompany(event.target.value)}
-                  placeholder="Startup, product, or team name"
-                  className="w-full rounded-2xl border-[3px] border-black bg-white px-4 py-3 text-sm font-medium text-black outline-none transition focus:-translate-y-0.5"
+                  className="w-full rounded-2xl border-[3px] border-border bg-bg-elevated px-4 py-3 text-sm font-medium outline-none focus:-translate-y-0.5"
+                  placeholder="Startup, product, or team"
                 />
               </label>
             </div>
 
-            <label className="space-y-2 text-sm font-black text-black">
+            <label className="space-y-1.5 text-sm font-bold">
               <span>What are you building?</span>
               <textarea
-                name="message"
+                required
+                rows={5}
                 value={details}
                 onChange={(event) => setDetails(event.target.value)}
-                placeholder="Give the quick version: what you need, what is blocked, and what kind of help you want."
-                rows={5}
-                required
-                className="w-full resize-none rounded-2xl border-[3px] border-black bg-white px-4 py-3 text-sm font-medium text-black outline-none transition focus:-translate-y-0.5"
+                className="w-full resize-none rounded-2xl border-[3px] border-border bg-bg-elevated px-4 py-3 text-sm font-medium outline-none focus:-translate-y-0.5"
+                placeholder="Quick version: what you need, what is blocked, and what kind of help you want."
               />
             </label>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <button
                 type="submit"
                 disabled={submitting}
-                className="inline-flex items-center gap-2 rounded-2xl border-[3px] border-black bg-deepPink px-5 py-3 text-sm font-black text-black shadow-[4px_4px_0_#000] transition hover:-translate-y-0.5"
+                className="btn btn-primary disabled:cursor-not-allowed disabled:opacity-70"
               >
                 <Send className="h-4 w-4" />
-                {submitting ? "Sending..." : "Send inquiry"}
+                {submitting ? "Sending…" : "Send inquiry"}
               </button>
               <Link
-                href={profile.calendly}
+                href={profile.socials.find((s) => s.label === "Calendly")!.href}
                 target="_blank"
-                className="inline-flex items-center gap-2 rounded-2xl border-[3px] border-black bg-bananaCream px-5 py-3 text-sm font-black text-black shadow-[4px_4px_0_#000] transition hover:-translate-y-0.5"
+                rel="noreferrer"
+                className="btn btn-secondary"
               >
                 <CalendarDays className="h-4 w-4" />
                 Schedule a meet
               </Link>
             </div>
-            <p className="text-sm font-bold text-black/75">{result}</p>
+            {result.message ? (
+              <p
+                role="status"
+                className={`text-sm font-bold ${result.type === "ok" ? "text-aquamarine" : "text-deepPink"}`}
+              >
+                {result.message}
+              </p>
+            ) : null}
           </form>
         </div>
 
-        <div className="grid auto-rows-min gap-4 sm:grid-cols-2 xl:grid-cols-1">
-          {links.map(({ label, href, icon: Icon, tone, detail }) => (
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
+          {linkItems.map(({ label, href, icon: Icon, accent, detail }) => (
             <Link
               key={label}
               href={href}
               target={href.startsWith("mailto:") ? undefined : "_blank"}
-              className={`${tone} block rounded-[28px] border-[3px] border-black p-5 text-black shadow-[6px_6px_0_#000] transition hover:-translate-y-1`}
+              rel={href.startsWith("mailto:") ? undefined : "noreferrer"}
+              className={`card-flat ${accent} flex items-start gap-4 p-4 transition hover:-translate-y-1`}
             >
-              <div className="flex items-start gap-4">
-                <div className="rounded-2xl border-[3px] border-black bg-white p-3">
-                  <Icon className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-xl font-black">{label}</p>
-                  <p className="mt-2 text-sm font-medium leading-relaxed text-black/80">{detail}</p>
-                </div>
-              </div>
+              <span className="rounded-2xl border-[3px] border-border bg-bg-elevated p-2.5">
+                <Icon className="h-5 w-5 text-ink" aria-hidden />
+              </span>
+              <span className="leading-tight">
+                <span className="block text-lg font-black text-ink">{label}</span>
+                <span className="mt-1 block text-xs font-medium text-ink-soft">{detail}</span>
+              </span>
             </Link>
           ))}
         </div>

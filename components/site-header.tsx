@@ -2,46 +2,52 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { profile } from "@/data/profile"
 
 const links = [
   { href: "/", label: "Home" },
-  { href: "/web3", label: "Web3" },
   { href: "/work", label: "Work" },
-  { href: "/#contact", label: "Get in touch" },
+  { href: "/web3", label: "Web3" },
+  { href: "/writing", label: "Writing" },
+  { href: "/resume", label: "Resume" },
 ]
 
 export function SiteHeader() {
   const pathname = usePathname()
 
   return (
-    <header className="sticky top-0 z-50 border-b-[3px] border-black bg-[#fff8ef]/95 shadow-[0_4px_0_#000] backdrop-blur">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+    <header className="sticky top-0 z-50 border-b-[3px] border-border bg-bg/90 backdrop-blur">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
         <Link href="/" className="inline-flex items-center gap-3">
-          <span className="rotate-[-3deg] rounded-xl border-[3px] border-black bg-deepPink px-3 py-1 font-mono text-sm font-black text-black shadow-[4px_4px_0_#000]">
-            PJU//LAB
+          <span className="rounded-xl border-[3px] border-border bg-deepPink px-3 py-1 font-mono text-sm font-black text-black shadow-[3px_3px_0_0_var(--border)]">
+            {profile.initials}{"//"}LAB
           </span>
-          <div>
-            <p className="font-mono text-sm font-bold text-black">Piyush J. Utkar</p>
-            <p className="text-xs font-medium text-black/70">full-stack + web3 + systems</p>
+          <div className="leading-tight">
+            <p className="font-mono text-sm font-bold">{profile.shortName}</p>
+            <p className="text-xs text-ink-muted">{profile.location}</p>
           </div>
         </Link>
+
         <nav className="flex flex-wrap items-center gap-2">
           {links.map(({ href, label }) => {
-            const active = href === "/#contact" ? pathname === "/" : pathname === href
+            const active = pathname === href || (href !== "/" && pathname.startsWith(href))
             return (
               <Link
                 key={href}
                 href={href}
-                className={`rounded-xl border-[3px] border-black px-4 py-2 text-sm font-black text-black transition ${
+                aria-current={active ? "page" : undefined}
+                className={`rounded-xl border-[3px] border-border px-3 py-1.5 text-xs font-bold transition ${
                   active
-                    ? "rotate-[-2deg] bg-bananaCream shadow-[4px_4px_0_#000]"
-                    : "bg-white shadow-[2px_2px_0_#000] hover:-translate-y-0.5 hover:bg-aquamarine"
+                    ? "bg-bananaCream shadow-[3px_3px_0_0_var(--border)]"
+                    : "bg-bg-elevated shadow-[2px_2px_0_0_var(--border)] hover:-translate-y-0.5"
                 }`}
               >
                 {label}
               </Link>
             )
           })}
+          <ThemeToggle />
         </nav>
       </div>
     </header>
