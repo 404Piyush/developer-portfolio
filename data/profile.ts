@@ -3,6 +3,13 @@ export type SocialLink = {
   href: string
 }
 
+export type Cv = {
+  label: string
+  description: string
+  href: string
+  accent: string
+}
+
 export type Profile = {
   name: string
   initials: string
@@ -14,7 +21,8 @@ export type Profile = {
   summary: string
   highlights: string[]
   socials: SocialLink[]
-  resume: { label: string; href: string }
+  resume: Cv
+  cvs: Cv[]
 }
 
 export const profile: Profile = {
@@ -40,5 +48,30 @@ export const profile: Profile = {
     { label: "Calendly", href: "https://calendly.com/404piyush" },
     { label: "Twitter", href: "https://twitter.com/PiyushUtkar" },
   ],
-  resume: { label: "Download resume (PDF)", href: "/resume.pdf" },
+  resume: {
+    label: "General resume",
+    description: "One-page summary covering all three lanes.",
+    href: "/cv/resume.pdf",
+    accent: "bg-bananaCream",
+  },
+  cvs: [
+    {
+      label: "Web3 / Solidity",
+      description: "Smart contracts, OP-Stack L2, DeFi, multi-chain tooling.",
+      href: "/cv/web3-cv.pdf",
+      accent: "bg-deepPink",
+    },
+    {
+      label: "Full-Stack",
+      description: "React · Next.js · FastAPI · RabbitMQ · Postgres, async + real-time systems.",
+      href: "/cv/fullstack-cv.pdf",
+      accent: "bg-deepSkyBlue",
+    },
+    {
+      label: "Systems (C)",
+      description: "C11, POSIX, custom allocators, microbenchmarks, public curriculum.",
+      href: "/cv/systems-cv.pdf",
+      accent: "bg-aquamarine",
+    },
+  ],
 }

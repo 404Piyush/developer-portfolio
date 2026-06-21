@@ -29,18 +29,9 @@
   --text-muted: #a1a1aa;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0e0e10;
-    --bg-elevated: #18181b;
-    --bg-muted: #1f1f23;
-    --border: #fafafa;
-    --border-soft: #2a2a2e;
-    --text: #fafafa;
-    --text-soft: #d4d4d8;
-    --text-muted: #a1a1aa;
-  }
-}
+/* Dark theme is opt-in via the manual toggle, not OS preference.
+ * The site is intentionally light/warm by default so the cream/yellow palette
+ * is always the base. */
 
 html,
 body {

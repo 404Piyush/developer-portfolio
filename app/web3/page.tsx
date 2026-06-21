@@ -95,6 +95,19 @@ export default function Web3Page() {
               </span>
             ))}
           </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href="/cv/web3-cv.pdf"
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-primary"
+            >
+              Download Web3 CV (PDF)
+            </a>
+            <Link href="/resume" className="btn">
+              All CVs
+            </Link>
+          </div>
         </section>
       </MotionReveal>
 

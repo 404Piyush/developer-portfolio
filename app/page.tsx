@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { ArrowDown, ArrowRight, Mail } from "lucide-react"
+import { CvPicker } from "@/components/cv-picker"
 import { GetInTouch } from "@/components/get-in-touch"
 import { MetricsBar } from "@/components/metrics-bar"
 import { MotionReveal } from "@/components/motion-reveal"
@@ -55,13 +56,17 @@ export default function HomePage() {
               View selected work
               <ArrowRight className="h-4 w-4" />
             </Link>
-            <Link href={profile.resume.href} className="btn">
-              {profile.resume.label}
-            </Link>
             <Link href="#contact" className="btn btn-secondary">
               <Mail className="h-4 w-4" />
               Get in touch
             </Link>
+          </div>
+
+          <div className="mt-5">
+            <p className="eyebrow text-ink-muted">Resume — pick the lane</p>
+            <div className="mt-3">
+              <CvPicker cvs={profile.cvs} primaryHref={profile.resume.href} primaryLabel={profile.resume.label} />
+            </div>
           </div>
 
           <div className="mt-6">

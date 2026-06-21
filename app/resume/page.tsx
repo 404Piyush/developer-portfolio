@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Download, Mail } from "lucide-react"
+import { Mail } from "lucide-react"
 import { MotionReveal } from "@/components/motion-reveal"
+import { CvPicker } from "@/components/cv-picker"
 import { profile } from "@/data/profile"
 import { featuredProjects } from "@/data/projects"
 import { freelance, freelanceSummary } from "@/data/freelance"
@@ -9,7 +10,7 @@ import { skills } from "@/data/skills"
 
 export const metadata: Metadata = {
   title: "Resume",
-  description: `One-page resume for ${profile.name}: ${profile.role} based in ${profile.location}.`,
+  description: `Resumes for ${profile.name}: ${profile.role} based in ${profile.location}. General, Web3, Full-Stack, and Systems (C) variants.`,
 }
 
 const summary =
@@ -19,7 +20,7 @@ export default function ResumePage() {
   return (
     <div className="space-y-10 pb-12 pt-2">
       <MotionReveal>
-        <header className="card p-6 sm:p-8">
+        <header className="card bg-bananaCream p-6 sm:p-8">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="eyebrow text-ink-muted">Resume</p>
@@ -30,14 +31,17 @@ export default function ResumePage() {
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Link href="/resume.pdf" className="btn btn-primary">
-                <Download className="h-4 w-4" />
-                Download PDF
-              </Link>
-              <Link href="#contact" className="btn">
+              <Link href="/#contact" className="btn btn-primary">
                 <Mail className="h-4 w-4" />
                 Email me
               </Link>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <p className="eyebrow text-ink-muted">Pick the CV that matches the role</p>
+            <div className="mt-3">
+              <CvPicker cvs={profile.cvs} primaryHref={profile.resume.href} primaryLabel={profile.resume.label} />
             </div>
           </div>
         </header>

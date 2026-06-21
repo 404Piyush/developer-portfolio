@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { MotionReveal } from "@/components/motion-reveal"
 import { ProjectBrowser } from "@/components/project-browser"
 import { projects } from "@/data/projects"
@@ -22,6 +23,19 @@ export default function WorkPage() {
             Search by stack, category, or keyword. Public repositories open directly; private builds turn
             into walkthrough requests, so no card is a dead end.
           </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href="/cv/fullstack-cv.pdf"
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-primary"
+            >
+              Download Full-Stack CV (PDF)
+            </a>
+            <Link href="/resume" className="btn">
+              All CVs
+            </Link>
+          </div>
         </section>
       </MotionReveal>
 
