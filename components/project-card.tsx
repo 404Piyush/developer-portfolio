@@ -19,7 +19,7 @@ export function ProjectCard({ project, size = "default" }: ProjectCardProps) {
 
   return (
     <article className="card group flex flex-col">
-      <header className={`flex flex-wrap items-center justify-between gap-2 border-b-[3px] border-border ${accent} px-5 py-3`}>
+      <header className={`flex flex-wrap items-center justify-between gap-2 rounded-t-[25px] border-b-[3px] border-border ${accent} px-5 py-3`}>
         <span className="tag bg-bg-elevated">{project.visibility}</span>
         <span className="font-mono text-xs font-bold text-ink">{project.year}</span>
       </header>

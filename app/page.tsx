@@ -1,7 +1,8 @@
 import Link from "next/link"
-import { ArrowDown, ArrowRight, Mail } from "lucide-react"
+import { ArrowRight, Mail } from "lucide-react"
 import { CvPicker } from "@/components/cv-picker"
 import { GetInTouch } from "@/components/get-in-touch"
+import { JumpToContactFab } from "@/components/jump-to-contact-fab"
 import { MetricsBar } from "@/components/metrics-bar"
 import { MotionReveal } from "@/components/motion-reveal"
 import { ProjectCard } from "@/components/project-card"
@@ -247,16 +248,8 @@ export default function HomePage() {
         <GetInTouch />
       </MotionReveal>
 
-      {/* JUMP */}
-      <div className="flex justify-center pt-4">
-        <a
-          href="#contact"
-          className="inline-flex items-center gap-2 rounded-full border-[3px] border-border bg-bg-elevated px-5 py-2 text-xs font-bold shadow-[3px_3px_0_0_var(--border)] hover:-translate-y-0.5"
-        >
-          <ArrowDown className="h-3.5 w-3.5" />
-          Jump to contact
-        </a>
-      </div>
+      {/* JUMP-TO-CONTACT FAB */}
+      <JumpToContactFab />
     </div>
   )
 }

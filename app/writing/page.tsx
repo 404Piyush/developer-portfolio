@@ -5,7 +5,7 @@ import { writingPosts } from "@/data/writing"
 
 export const metadata: Metadata = {
   title: "Writing",
-  description: "Technical writing from Piyush Utkar on Web3, Discord bots, and C systems work.",
+  description: "Technical writing from Piyush Utkar on Web3, Discord bots, C systems work, and full-stack deployment.",
 }
 
 const formatDate = (iso: string) =>
@@ -17,47 +17,60 @@ export default function WritingPage() {
   return (
     <div className="space-y-10 pb-12 pt-2">
       <MotionReveal>
-        <section className="card p-6 sm:p-8">
+        <section className="card bg-bananaCream p-6 sm:p-8">
           <p className="eyebrow text-ink-muted">Writing</p>
           <h1 className="mt-3 text-4xl font-black leading-[1.05] sm:text-5xl">
             Notes from the work.
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-ink-soft">
-            Short technical writeups on the projects I am shipping. More posts land as I find the time to
-            write them up properly.
+            Technical writeups on the projects I am shipping. Short, honest, and grounded in the code
+            I actually wrote. More posts land as I find the time to write them up properly.
           </p>
         </section>
       </MotionReveal>
 
-      <MotionReveal>
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {writingPosts.map((post, index) => (
+      <div className="space-y-8">
+        {writingPosts.map((post, index) => (
+          <MotionReveal key={post.slug} delay={index * 0.04}>
             <article
-              key={post.slug}
-              className={`card p-5 ${index % 3 === 0 ? "bg-bananaCream" : index % 3 === 1 ? "bg-aquamarine" : "bg-deepSkyBlue"}`}
+              className={`card p-6 sm:p-8 ${
+                index === 0 ? "bg-bg-elevated" : index === 1 ? "bg-aquamarine" : "bg-bg-muted"
+              }`}
             >
-              <p className="font-mono text-xs font-bold text-ink">
-                {formatDate(post.date)} · {post.readingTime}
-              </p>
-              <h2 className="mt-3 text-xl font-black">{post.title}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-ink-soft">{post.excerpt}</p>
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {post.tags.map((tag) => (
-                  <span key={tag} className="tag bg-bg-elevated">
-                    {tag}
-                  </span>
+              <header>
+                <p className="font-mono text-xs font-bold text-ink">
+                  {formatDate(post.date)} · {post.readingTime}
+                </p>
+                <h2 className="mt-2 text-2xl font-black leading-tight sm:text-3xl">{post.title}</h2>
+                <p className="mt-2 text-base leading-relaxed text-ink-soft">{post.excerpt}</p>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {post.tags.map((tag) => (
+                    <span key={tag} className="tag bg-bg-elevated">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </header>
+
+              <div className="prose prose-sm mt-6 max-w-none">
+                {post.body.map((paragraph, pIndex) => (
+                  <p key={pIndex} className="text-sm leading-relaxed text-ink-soft">
+                    {paragraph}
+                  </p>
                 ))}
               </div>
-              <p className="mt-4 text-xs font-bold text-ink-muted">
-                Full post coming soon — subscribe via{" "}
-                <Link href="/#contact" className="underline">
-                  email
-                </Link>{" "}
-                and I will send it when it lands.
-              </p>
             </article>
-          ))}
-        </div>
+          </MotionReveal>
+        ))}
+      </div>
+
+      <MotionReveal>
+        <section className="card p-6 sm:p-8 text-center">
+          <p className="text-sm font-bold text-ink-soft">
+            Want to read more? <Link href="/#contact" className="underline">Send a request</Link>{" "}
+            and I will write the next one.
+          </p>
+        </section>
       </MotionReveal>
     </div>
   )

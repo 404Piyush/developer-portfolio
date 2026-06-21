@@ -21,7 +21,7 @@ export function SiteHeader() {
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
         <Link href="/" className="inline-flex items-center gap-3">
           <span className="rounded-xl border-[3px] border-border bg-deepPink px-3 py-1 font-mono text-sm font-black text-black shadow-[3px_3px_0_0_var(--border)]">
-            {profile.initials}{"//"}LAB
+            {profile.initials}{"//"}{"LAB"}
           </span>
           <div className="leading-tight">
             <p className="font-mono text-sm font-bold">{profile.shortName}</p>

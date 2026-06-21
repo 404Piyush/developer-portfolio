@@ -42,7 +42,7 @@ export default function OpengraphImage() {
               fontWeight: 800,
             }}
           >
-            {profile.initials}{"//"}LAB
+            {profile.initials}{"//"}{"LAB"}
           </div>
           <span>{profile.location}</span>
         </div>
