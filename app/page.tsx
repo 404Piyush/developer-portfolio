@@ -16,25 +16,35 @@ export default function HomePage() {
     <div className="space-y-20 pb-16 pt-2">
       {/* HERO */}
       <MotionReveal className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-        <section className="card relative overflow-hidden p-6 sm:p-8">
-          <div className="flex flex-wrap items-center gap-3">
+        <section className="card relative overflow-hidden bg-bananaCream p-6 sm:p-8">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-2xl border-[3px] border-border bg-lavender px-3 py-1 font-mono text-xs font-black text-ink">
               {profile.role}
             </span>
-            <span className="rounded-2xl border-[3px] border-border bg-bananaCream px-3 py-1 text-xs font-black text-ink">
+            <span className="rounded-2xl border-[3px] border-border bg-bg-elevated px-3 py-1 text-xs font-black text-ink">
               {profile.location}
-            </span>
-            <span className="rounded-2xl border-[3px] border-border bg-aquamarine px-3 py-1 text-xs font-black text-ink">
-              Open to work
             </span>
           </div>
 
-          <h1 className="mt-6 max-w-3xl text-4xl font-black leading-[1.05] sm:text-6xl">
-            Self-taught engineer shipping across{" "}
-            <span className="bg-deepPink px-2 text-black">Web3</span>,{" "}
-            <span className="bg-deepSkyBlue px-2 text-black">full-stack</span>, and{" "}
-            <span className="bg-aquamarine px-2 text-black">systems</span>.
+          <h1 className="mt-6 max-w-3xl text-4xl font-black leading-[1.1] tracking-tight sm:text-5xl">
+            Self-taught engineer shipping across Web3, full-stack, and systems.
           </h1>
+
+          <ul className="mt-4 flex flex-wrap items-center gap-2" aria-label="Specialties">
+            {[
+              { label: "Web3", tone: "bg-deepPink" },
+              { label: "Full-stack", tone: "bg-deepSkyBlue" },
+              { label: "Systems (C)", tone: "bg-aquamarine" },
+              { label: "Discord bots", tone: "bg-bananaCream" },
+            ].map((item) => (
+              <li
+                key={item.label}
+                className={`rounded-xl border-[3px] border-border px-3 py-1 font-mono text-xs font-black text-ink ${item.tone}`}
+              >
+                {item.label}
+              </li>
+            ))}
+          </ul>
 
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-ink-soft sm:text-lg">
             {profile.summary}

@@ -30,26 +30,27 @@ type MetricsBarProps = {
 export function MetricsBar({ publicRepos, totalJobs, memberSince }: MetricsBarProps) {
   const time = useLocalClock("Asia/Kolkata")
   return (
-    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-2xl border-[3px] border-border bg-bg-elevated px-4 py-3 font-mono text-xs shadow-[4px_4px_0_0_var(--border)]">
-      <span className="inline-flex items-center gap-2 font-bold">
-        <span className="h-2 w-2 animate-pulse rounded-full bg-aquamarine" />
-        Status: Online
-      </span>
-      <span className="text-ink-muted">·</span>
-      <span>
-        <strong className="font-bold">{publicRepos}</strong>{" "}
-        <span className="text-ink-muted">public repos</span>
-      </span>
-      <span className="text-ink-muted">·</span>
-      <span>
-        <strong className="font-bold">{totalJobs}</strong>{" "}
-        <span className="text-ink-muted">client jobs delivered</span>
-      </span>
-      <span className="text-ink-muted">·</span>
-      <span className="text-ink-muted">since</span>{" "}
-      <span className="font-bold">{memberSince}</span>
-      <span className="text-ink-muted">·</span>
-      <span className="font-bold">{time} IST</span>
-    </div>
+    <dl className="flex flex-wrap items-center gap-x-5 gap-y-2 rounded-2xl border-[3px] border-border bg-bg-elevated px-4 py-3 font-mono text-xs shadow-[4px_4px_0_0_var(--border)]">
+      <div className="inline-flex items-center gap-2 font-bold">
+        <span className="h-2 w-2 animate-pulse rounded-full bg-aquamarine" aria-hidden />
+        <span>Status: Online</span>
+      </div>
+      <div className="flex items-center gap-1.5">
+        <dt className="text-ink-muted">Repos</dt>
+        <dd className="font-bold">{publicRepos}</dd>
+      </div>
+      <div className="flex items-center gap-1.5">
+        <dt className="text-ink-muted">Client jobs</dt>
+        <dd className="font-bold">{totalJobs}</dd>
+      </div>
+      <div className="flex items-center gap-1.5">
+        <dt className="text-ink-muted">Since</dt>
+        <dd className="font-bold">{memberSince}</dd>
+      </div>
+      <div className="flex items-center gap-1.5">
+        <dt className="text-ink-muted">Local</dt>
+        <dd className="font-bold">{time} IST</dd>
+      </div>
+    </dl>
   )
 }
